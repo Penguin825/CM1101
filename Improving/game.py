@@ -240,8 +240,9 @@ def execute_go(direction):
     moving). Otherwise, it prints "You cannot go there."
     """
 
-    if current_room[exits[direction]]:
-        current_room = current_room[exits[direction]]
+    global current_room
+    if current_room["exits"][direction]:
+        current_room = rooms[current_room["exits"][direction]]
     else:
         print("You cannot go there.")
         
@@ -253,7 +254,13 @@ def execute_take(item_id):
     there is no such item in the room, this function prints
     "You cannot take that."
     """
-    pass
+
+    for item in current_room["items"]:
+        if item["id"] == item_id:
+            current_room["items"].remove(item)
+            inventory.append(item)
+            return
+    print("You cannot take that.")
     
 
 def execute_drop(item_id):
@@ -261,7 +268,13 @@ def execute_drop(item_id):
     player's inventory to list of items in the current room. However, if there is
     no such item in the inventory, this function prints "You cannot drop that."
     """
-    pass
+
+    for item in inventory:
+        if item["id"] == item_id:
+            inventory.remove(item)
+            current_room["items"].append(item)
+            return
+    print("You cannot drop that.")
     
 
 def execute_command(command):
